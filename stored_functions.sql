@@ -72,5 +72,44 @@ GROUP BY staff_id;
 
 
 
+-- Functions can all return Tables
+-- Create a function that will return a table with customers (first and last) and their 
+-- full address( address, city, district, country) by searching a country name
+CREATE OR REPLACE FUNCTION customers_in_country(country_name VARCHAR(50))
+RETURNS TABLE(
+	first_name VARCHAR,
+	last_name VARCHAR,
+	address VARCHAR,
+	city VARCHAR,
+	district VARCHAR,
+	country VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY
+	SELECT c.first_name, c.last_name, a.address, ci.city, a.district, co.country
+	FROM customer c
+	JOIN address a 
+	ON c.address_id = a.address_id 
+	JOIN city ci 
+	ON a.city_id = ci.city_id 
+	JOIN country co 
+	ON ci.country_id = co.country_id 
+	WHERE co.country = country_name;
+END;
+$$;
+
+SELECT district, COUNT(*)
+FROM customers_in_country('united states')
+GROUP BY district;
+
+
+
+
+
+
+
+
 
 
