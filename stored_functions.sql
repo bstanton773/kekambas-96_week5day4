@@ -105,7 +105,8 @@ FROM customers_in_country('united states')
 GROUP BY district;
 
 
-
+-- To remove a function, use DROP
+DROP FUNCTION get_actor_count;
 
 
 
